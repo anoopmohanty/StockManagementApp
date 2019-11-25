@@ -22,6 +22,7 @@ type
     procedure btnSearchProductClick(Sender: TObject);
     procedure btnStockUpdateClick(Sender: TObject);
     procedure edtSearchProductNameKeyPress(Sender: TObject; var Key: Char);
+    procedure DBEdtStockNumberKeyPress(Sender: TObject; var Key: Char);
   private
     { Private declarations }
   public
@@ -100,6 +101,17 @@ procedure TfrmStockUpdateScreen.edtSearchProductNameKeyPress(
 begin
    if Key = #13 then
     btnSearchProduct.Click;
+end;
+
+procedure TfrmStockUpdateScreen.DBEdtStockNumberKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  // #8 is Backspace
+  if not (Key in [#8, '0'..'9']) then begin
+    ShowMessage('Only numbers are allowed in this field');
+    // Discard the key
+    Key := #0;
+  end;
 end;
 
 end.

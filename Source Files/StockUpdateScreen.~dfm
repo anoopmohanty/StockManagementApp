@@ -38,6 +38,7 @@ object frmStockUpdateScreen: TfrmStockUpdateScreen
     Text = 'Search by Product Name'
     OnChange = edtSearchProductNameChange
     OnClick = edtSearchProductNameClick
+    OnKeyPress = edtSearchProductNameKeyPress
   end
   object btnSearchProduct: TButton
     Left = 264
@@ -126,6 +127,7 @@ object frmStockUpdateScreen: TfrmStockUpdateScreen
     DataField = 'StockQuantity'
     DataSource = dmInvManagerDb.DscProductDet
     TabOrder = 2
+    OnKeyPress = DBEdtStockNumberKeyPress
   end
   object btnStockUpdate: TButton
     Left = 264

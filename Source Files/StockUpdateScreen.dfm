@@ -67,7 +67,6 @@ object frmStockUpdateScreen: TfrmStockUpdateScreen
     Font.Name = 'MS Sans Serif'
     Font.Style = []
     ParentFont = False
-    ReadOnly = True
     TabOrder = 4
     TitleFont.Charset = DEFAULT_CHARSET
     TitleFont.Color = clWindowText
@@ -127,6 +126,7 @@ object frmStockUpdateScreen: TfrmStockUpdateScreen
     DataField = 'StockQuantity'
     DataSource = dmInvManagerDb.DscProductDet
     TabOrder = 2
+    OnKeyPress = DBEdtStockNumberKeyPress
   end
   object btnStockUpdate: TButton
     Left = 264

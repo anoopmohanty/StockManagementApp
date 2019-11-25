@@ -162,6 +162,7 @@ object frmProductAddScreen: TfrmProductAddScreen
       Font.Style = []
       ParentFont = False
       TabOrder = 4
+      OnKeyPress = edtStockQuantityKeyPress
     end
     object CmbProductSubCategory: TComboBox
       Left = 160
@@ -206,6 +207,7 @@ object frmProductAddScreen: TfrmProductAddScreen
       Text = 'Search by Product Name'
       OnChange = edtSearchProductChange
       OnClick = edtSearchProductClick
+      OnKeyPress = edtSearchProductKeyPress
     end
     object btnSearchProduct: TButton
       Left = 256

@@ -43,8 +43,11 @@ begin
  begin
    with dmInvManagerDb do
    begin
-     ADOQryLoginDet.Parameters.ParamByName('UserNameInput').Value:= edtUserName.Text;
-     ADOQryLoginDet.Parameters.ParamByName('PwdInput').Value:= edtPassword.Text;
+     ADOQryLoginDet.Close;
+     ADOQryLoginDet.SQL.Clear;
+     ADOQryLoginDet.SQL.Add ('SELECT * FROM LoginDet  ' +
+     'WHERE (UserName ="' + edtUserName.Text +'" ' +
+     'AND Password ="' + edtPassword.Text +'");');
      ADOQryLoginDet.Open;
      if ADOQryLoginDet.RecordCount > 0 then
      begin
@@ -55,6 +58,7 @@ begin
      begin
       edtUserName.Text:='';
       edtPassword.Text:='';
+      edtUserName.SetFocus;
       MessageDlg('Username or Password is incorrect',mtError,[mbOK],0);
      end;
    end;

@@ -55,16 +55,37 @@ begin
 end;
 
 procedure TfrmCategoryAddScreen.btnNewCatSaveClick(Sender: TObject);
+var
+  buttonSelected : Integer;
+  DBName : String;
 begin
+  buttonSelected:= 0;
   try
     if (edtNewCatName.Text = '') or  (edtNewCatDesc.Text= '') then
     begin
-      MessageDlg('Please enter details in Category Name and Description fields',mtError,[mbOK],0);
+      MessageDlg('Please enter details in Category Name and Description fields',
+      mtError,[mbOK],0);
       Exit;
     end;
 
-    InsertDatainProdCategoryTable;
+    DBName:= 'ProductCategory';
+    if dmInvManagerDb.CheckSimilarDataExistsinDatabase
+      (DBName,edtNewCatName.Text) then
+    begin
+      buttonSelected := MessageDlg('An entry with same Category Name already exists in database.'
+      + #13#10 + 'Do you still want to add this record?', mtConfirmation,[mbYes,mbNo],0);
+      if buttonSelected = mrYes then
+        InsertDatainProdCategoryTable
+      else begin
+        edtNewCatName.Text:= '';
+        edtNewCatName.SetFocus;
+        Exit;
+      end;  
+    end
+    else
+     InsertDatainProdCategoryTable;
 
+    
     //Refresh data in DBgrid to display newly inserted data
     DBGridCategory.DataSource.DataSet.Active:= False;
     DBGridCategory.DataSource.DataSet.Active:= True;

@@ -40,7 +40,10 @@ implementation
 {$R *.dfm}
 
 procedure TfrmSubCategoryAddScreen.btnSubCatSaveClick(Sender: TObject);
+  buttonSelected : Integer;
+  DBName : String;
 begin
+  buttonSelected:= 0;
   try
     if (edtSubCatName.Text = '') or  (edtSubCatDesc.Text= '')
     or (DBCmbProdCat.Text = '') then
@@ -49,7 +52,22 @@ begin
       exit;
     end;
 
-    InsertDatainProdSubCategoryTable;
+    DBName:= 'ProductSubCategory';
+    if dmInvManagerDb.CheckSimilarDataExistsinDatabase
+      (DBName,edtSubCatName.Text) then
+    begin
+      buttonSelected := MessageDlg('An entry with same SubCategory Name already exists in database.'
+      + #13#10 + 'Do you still want to add this record?', mtConfirmation,[mbYes,mbNo],0);
+      if buttonSelected = mrYes then
+        InsertDatainProdSubCategoryTable
+      else begin
+        edtSubCatName.Text:= '';
+        edtSubCatName.SetFocus;
+        Exit;
+      end;  
+    end
+    else
+     InsertDatainProdSubCategoryTable;
 
     //Refresh data in DBgrid to display newly inserted data
     DBGridSubCat.DataSource.DataSet.Active:= False;

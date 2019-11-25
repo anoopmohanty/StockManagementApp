@@ -101,6 +101,8 @@ var
   StockUpdateHistoryForm:  TfrmStockUpdateHistory;
 begin
   StockUpdateHistoryForm:= TfrmStockUpdateHistory.Create(self);
+  StockUpdateHistoryForm.DBGridStockUpdHist.DataSource.DataSet.Close;
+  StockUpdateHistoryForm.DBGridStockUpdHist.DataSource.DataSet.Open;
   StockUpdateHistoryForm.ShowModal;
   StockUpdateHistoryForm.Free;
 end;

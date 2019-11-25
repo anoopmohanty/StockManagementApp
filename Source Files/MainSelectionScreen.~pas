@@ -5,7 +5,7 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, Grids, DBGrids, StdCtrls, ExtCtrls, ProductAddScreen,
-  CategoryAddScreen, SubCategoryScreen, StockUpdateScreen, StockUpdateHistoryForm;
+  CategoryAddScreen, SubCategoryScreen, StockUpdateScreen, StockUpdateHistory;
 
 type
   TfrmMainSelectionScreen = class(TForm)
@@ -101,6 +101,8 @@ var
   StockUpdateHistoryForm:  TfrmStockUpdateHistory;
 begin
   StockUpdateHistoryForm:= TfrmStockUpdateHistory.Create(self);
+  StockUpdateHistoryForm.DBGridStockUpdHist.DataSource.DataSet.Close;
+  StockUpdateHistoryForm.DBGridStockUpdHist.DataSource.DataSet.Open;
   StockUpdateHistoryForm.ShowModal;
   StockUpdateHistoryForm.Free;
 end;

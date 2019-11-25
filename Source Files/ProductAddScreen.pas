@@ -5,7 +5,7 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, StdCtrls, Grids, DBGrids, InventoryManagerDataModule, DBCtrls,
-  DateUtils;
+  DateUtils, Mask;
 
 type
   TfrmProductAddScreen = class(TForm)
@@ -36,6 +36,7 @@ type
     procedure edtSearchProductChange(Sender: TObject);
     procedure btnSearchProductClick(Sender: TObject);
     procedure edtSearchProductKeyPress(Sender: TObject; var Key: Char);
+    procedure edtStockQuantityKeyPress(Sender: TObject; var Key: Char);
   private
     { Private declarations }
   public
@@ -60,6 +61,9 @@ end;
 
 procedure TfrmProductAddScreen.DBcmbProdCategoryCloseUp(Sender: TObject);
 begin
+  if DBcmbProdCategory.Text = '' then
+    Exit;
+    
   CmbProductSubCategory.Clear;
 
   //Fetch SubCategoryName details based on selected Category Name
@@ -85,8 +89,11 @@ end;
 
 procedure TfrmProductAddScreen.btnSaveNewProductClick(Sender: TObject);
 var
- CurrentDateTime        : TDateTime;
+  CurrentDateTime    : TDateTime;
+  buttonSelected     : Integer;
+  DBName             : String;
 begin
+  buttonSelected:= 0;
   CurrentDateTime:= Now;
 
   try
@@ -98,8 +105,26 @@ begin
       Exit;
     end;
 
-    InsertDatainProductDetailsTable(CurrentDateTime);
-    InsertDatainProductStockHistoryTable(CurrentDateTime);
+    DBName:= 'ProductDetails';
+    if dmInvManagerDb.CheckSimilarDataExistsinDatabase
+      (DBName,edtProdName.Text) then
+    begin
+      buttonSelected := MessageDlg('An entry with same Product Name already exists in database.'
+      + #13#10 + 'Do you still want to add this record?', mtConfirmation,[mbYes,mbNo],0);
+      if buttonSelected = mrYes then begin
+        InsertDatainProductDetailsTable(CurrentDateTime);
+        InsertDatainProductStockHistoryTable(CurrentDateTime);
+      end
+      else begin
+        edtProdName.Text:= '';
+        edtProdName.SetFocus;
+        Exit;
+      end;  
+    end
+    else begin
+      InsertDatainProductDetailsTable(CurrentDateTime);
+      InsertDatainProductStockHistoryTable(CurrentDateTime);
+    end;
 
     //Refresh data in DBgrid to display newly inserted data
     DBGridProductList.DataSource.DataSet.Active:= False;
@@ -200,7 +225,8 @@ begin
     '"' + DateTimeToStr (aDateTime) + '","' + frmLoginScreen.edtUserName.Text + '")');
 
     if (ADOQryInsert.ExecSQL) <> 0 then begin
-      DBcmbProdCategory.Refresh;
+      DBcmbProdCategory.ListSource.DataSet.Close;
+      DBcmbProdCategory.ListSource.DataSet.Open;
       CmbProductSubCategory.Clear;
       edtProdName.Text:= '';
       edtProdDesc.Text:= '';
@@ -237,6 +263,17 @@ procedure TfrmProductAddScreen.edtSearchProductKeyPress(Sender: TObject;
 begin
   if Key = #13 then
     btnSearchProduct.Click;
+end;
+
+procedure TfrmProductAddScreen.edtStockQuantityKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  // #8 is Backspace
+  if not (Key in [#8, '0'..'9']) then begin
+    ShowMessage('Only numbers are allowed in this field');
+    // Discard the key
+    Key := #0;
+  end;
 end;
 
 end.

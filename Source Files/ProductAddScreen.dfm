@@ -162,6 +162,7 @@ object frmProductAddScreen: TfrmProductAddScreen
       Font.Style = []
       ParentFont = False
       TabOrder = 4
+      OnKeyPress = edtStockQuantityKeyPress
     end
     object CmbProductSubCategory: TComboBox
       Left = 160

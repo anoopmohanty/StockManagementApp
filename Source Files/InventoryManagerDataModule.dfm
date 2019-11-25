@@ -18,29 +18,7 @@ object dmInvManagerDb: TdmInvManagerDb
   object ADOQryLoginDet: TADOQuery
     Connection = ADOConInventoryDb
     CursorType = ctStatic
-    Parameters = <
-      item
-        Name = 'UserNameInput'
-        Attributes = [paNullable]
-        DataType = ftWideString
-        NumericScale = 255
-        Precision = 255
-        Size = 510
-        Value = Null
-      end
-      item
-        Name = 'PwdInput'
-        Attributes = [paNullable]
-        DataType = ftWideString
-        NumericScale = 255
-        Precision = 255
-        Size = 510
-        Value = Null
-      end>
-    SQL.Strings = (
-      'SELECT * FROM LoginDet '
-      'WHERE UserName = :UserNameInput'
-      'AND Password = :PwdInput;')
+    Parameters = <>
     Left = 176
     Top = 40
   end
@@ -107,8 +85,8 @@ object dmInvManagerDb: TdmInvManagerDb
     Top = 192
   end
   object ADOQryStockUpdHistory: TADOQuery
-    Active = True
     Connection = ADOConInventoryDb
+    CursorLocation = clUseServer
     CursorType = ctStatic
     Parameters = <>
     SQL.Strings = (

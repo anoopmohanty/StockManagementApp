@@ -203,7 +203,6 @@ object frmMainSelectionScreen: TfrmMainSelectionScreen
       Font.Style = [fsBold]
       ParentFont = False
       TabOrder = 0
-      OnClick = btnStockHistViewClick
     end
   end
 end

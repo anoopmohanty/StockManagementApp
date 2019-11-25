@@ -126,6 +126,7 @@ object frmCategoryAddScreen: TfrmCategoryAddScreen
       Text = 'Search by Category Name'
       OnChange = edtCategorySearchChange
       OnClick = edtCategorySearchClick
+      OnKeyPress = edtCategorySearchKeyPress
     end
     object btnCatSearch: TButton
       Left = 296

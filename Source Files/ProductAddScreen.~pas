@@ -5,7 +5,7 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, StdCtrls, Grids, DBGrids, InventoryManagerDataModule, DBCtrls,
-  DateUtils;
+  DateUtils, Mask;
 
 type
   TfrmProductAddScreen = class(TForm)
@@ -35,7 +35,8 @@ type
     procedure InsertDatainProductStockHistoryTable (aDateTime : TDateTime) ;
     procedure edtSearchProductChange(Sender: TObject);
     procedure btnSearchProductClick(Sender: TObject);
-    procedure edtSearchProductEnter(Sender: TObject; var Key: Char);
+    procedure edtSearchProductKeyPress(Sender: TObject; var Key: Char);
+    procedure edtStockQuantityKeyPress(Sender: TObject; var Key: Char);
   private
     { Private declarations }
   public
@@ -60,6 +61,9 @@ end;
 
 procedure TfrmProductAddScreen.DBcmbProdCategoryCloseUp(Sender: TObject);
 begin
+  if DBcmbProdCategory.Text = '' then
+    Exit;
+    
   CmbProductSubCategory.Clear;
 
   //Fetch SubCategoryName details based on selected Category Name
@@ -200,7 +204,8 @@ begin
     '"' + DateTimeToStr (aDateTime) + '","' + frmLoginScreen.edtUserName.Text + '")');
 
     if (ADOQryInsert.ExecSQL) <> 0 then begin
-      DBcmbProdCategory.Refresh;
+      DBcmbProdCategory.ListSource.DataSet.Close;
+      DBcmbProdCategory.ListSource.DataSet.Open;
       CmbProductSubCategory.Clear;
       edtProdName.Text:= '';
       edtProdDesc.Text:= '';
@@ -232,11 +237,22 @@ begin
   end;
 end;
 
-procedure TfrmProductAddScreen.edtSearchProductEnter(Sender: TObject;
- var Key: Char);
+procedure TfrmProductAddScreen.edtSearchProductKeyPress(Sender: TObject;
+  var Key: Char);
 begin
   if Key = #13 then
     btnSearchProduct.Click;
+end;
+
+procedure TfrmProductAddScreen.edtStockQuantityKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  // #8 is Backspace
+  if not (Key in [#8, '0'..'9']) then begin
+    ShowMessage('Only numbers are allowed in this field');
+    // Discard the key
+    Key := #0;
+  end;
 end;
 
 end.
